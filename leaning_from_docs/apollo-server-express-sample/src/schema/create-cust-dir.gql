@@ -1,0 +1,10 @@
+directive @deprecated(
+  reason: String = "No longer supported"
+) on FIELD_DEFINITION | ENUM_VALUE
+
+directive @uppercase on FIELD_DEFINITION
+
+type Query {
+  # Usage
+  hello: String @uppercase
+}

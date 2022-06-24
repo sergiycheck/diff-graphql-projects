@@ -1,0 +1,47 @@
+input BlogPostContent {
+  title: String
+  body: String
+}
+
+input BlogPostContent {
+  title: String
+  body: String
+  media: [MediaDetails!]
+}
+
+input MediaDetails {
+  """
+  description for a field
+  """
+  format: MediaFormat!
+  url: String!
+}
+
+# enum types
+
+enum MediaFormat {
+  IMAGE
+  VIDEO
+}
+
+type Mutation {
+  createBlogPost(content: BlogPostContent!): Post
+  updateBlogPost(id: ID!, content: BlogPostContent!): Post
+}
+
+enum AllowedColor {
+  RED
+  GREEN
+  BLUE
+}
+
+type Query {
+  favoriteColor: AllowedColor # enum return value
+  avatar(borderColor: AllowedColor): String # enum argument
+}
+
+query GetAvatar {
+  avatar(borderColor: RED)
+}
+
+# internal value

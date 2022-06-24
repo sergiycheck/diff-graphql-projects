@@ -1,0 +1,34 @@
+union Media = Book | Movie
+
+type Query {
+  allMedia: [Media] # This list can include both Book and Movie objects
+}
+
+union SearchResult = Book | Author
+
+type Book {
+  title: String!
+}
+
+type Author {
+  name: String!
+}
+
+type Query {
+  search(contains: String): [SearchResult!]
+}
+
+query GetSearchResults {
+  search(contains: "Shakespeare") {
+    # Querying for __typename is almost always recommended,
+    # but it's even more important when querying a field that
+    # might return one of multiple types.
+    __typename
+    ... on Book {
+      title
+    }
+    ... on Author {
+      name
+    }
+  }
+}

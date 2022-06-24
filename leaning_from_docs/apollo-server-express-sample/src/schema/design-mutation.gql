@@ -1,0 +1,35 @@
+type Mutation {
+  updateUserEmail(id: ID!, email: String!): User
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+}
+
+# error response
+
+interface MutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+}
+
+type UpdateUserEmailMutationResponse implements MutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  user: User
+}
+
+# If a mutation modifies multiple types (like our earlier example of
+# "liking" a blog post), its implementing type can include a separate
+# field for each type that's modified:
+type LikePostMutationResponse implements MutationResponse {
+  code: String!
+  success: Boolean!
+  message: String!
+  post: Post
+  user: User
+}

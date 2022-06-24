@@ -1,0 +1,55 @@
+#  interface specifies a set of fields that multiple object types can include
+interface Book {
+  title: String!
+  author: Author!
+}
+
+type Textbook implements Book {
+  title: String! # Must be present
+  author: Author! # Must be present
+  courses: [Course!]!
+}
+
+type Query {
+  books: [Book!] # Can include Textbook objects
+}
+
+interface Book {
+  title: String!
+  author: Author!
+}
+
+type Textbook implements Book {
+  title: String!
+  author: Author!
+  courses: [Course!]!
+}
+
+type ColoringBook implements Book {
+  title: String!
+  author: Author!
+  colors: [String!]!
+}
+
+type Query {
+  books: [Book!]!
+}
+
+query GetBooks {
+  books {
+    # Querying for __typename is almost always recommended,
+    # but it's even more important when querying a field that
+    # might return one of multiple types.
+    __typename
+    title
+    ... on Textbook {
+      courses {
+        # Only present in Textbook
+        name
+      }
+    }
+    ... on ColoringBook {
+      colors # Only present in ColoringBook
+    }
+  }
+}
