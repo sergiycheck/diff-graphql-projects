@@ -1,0 +1,27 @@
+directive @deprecated(
+  reason: String = "No longer supported"
+) on FIELD_DEFINITION | ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION | ENUM_VALUE
+
+# Note: @deprecated arguments _must_ be optional.
+directive @withDeprecatedArgs(
+  deprecatedArg: String @deprecated(reason: "Use `newArg`")
+  newArg: String
+) on FIELD
+
+type MyType {
+  # ARGUMENT_DEFINITION (alternate example on a field's args)
+  fieldWithDeprecatedArgs(name: String! @deprecated): String
+  # FIELD_DEFINITION
+  deprecatedField: String @deprecated
+}
+
+enum MyEnum {
+  # ENUM_VALUE
+  OLD_VALUE @deprecated(reason: "Use `NEW_VALUE`.")
+  NEW_VALUE
+}
+
+type ExampleType {
+  oldField: String @deprecated(reason: "Use `newField`.")
+  newField: String
+}

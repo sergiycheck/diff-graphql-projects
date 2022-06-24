@@ -1,0 +1,25 @@
+query UniversalQuery {
+  __typename
+}
+
+# Query type is a special object type that
+# defines all of the top-level entry points
+type Query {
+  books: [Book]
+  authors: [Author]
+}
+
+type Mutation {
+  addBook(title: String, author: String): Book
+}
+
+type Book {
+  title: String
+  author: Author
+}
+
+type Author {
+  # __typename
+  name: String!
+  books: [Book!]
+}
