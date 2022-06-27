@@ -1,0 +1,37 @@
+type Todo {
+  id: String!
+  name: String!
+  description: String!
+  createdAt: String!
+  updatedAt: String!
+  completed: Boolean
+}
+
+input CreateTodo {
+  name: String!
+  description: String!
+  completed: Boolean!
+}
+
+input UpdateTodo {
+  id: String!
+  name: String
+  description: String
+  completed: Boolean
+}
+
+type DeleteResponse {
+  acknowledged: Boolean
+  deletedCount: Int
+}
+
+type Query {
+  todos: [Todo]
+  todo(id: String!): Todo!
+}
+
+type Mutation {
+  createTodo(todo: CreateTodo!): Todo!
+  updateTodo(todoPartial: UpdateTodo!): Todo!
+  deleteTodo(id: String!): DeleteResponse!
+}
