@@ -1,0 +1,16 @@
+schema {
+  query: Query
+  subscription: Subscription
+}
+
+type Subscription {
+  somethingChanged(id: Int): Result
+}
+
+type Result {
+  id: String
+}
+
+type Query {
+  currentNumber: Int
+}
