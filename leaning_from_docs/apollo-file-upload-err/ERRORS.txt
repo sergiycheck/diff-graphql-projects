@@ -1,0 +1,16 @@
+1. Error happened when installing @types/graphql-upload and using this types for graphql-upload package
+
+Error [ERR_PACKAGE_PATH_NOT_EXPORTED]: No "exports" main defined in /home/dev/projects/my_custom_own_projects/js_related/diff-graphql-projects/leaning_from_docs/apollo-file-upload/node_modules/graphql-upload/package.json
+    at new NodeError (node:internal/errors:372:5)
+    at throwExportsNotFound (node:internal/modules/esm/resolve:472:9)
+    at packageExportsResolve (node:internal/modules/esm/resolve:753:3)
+    at resolveExports (node:internal/modules/cjs/loader:482:36)
+    at Function.Module._findPath (node:internal/modules/cjs/loader:522:31)
+    at Function.Module._resolveFilename (node:internal/modules/cjs/loader:919:27)
+    at Function.Module._resolveFilename.sharedData.moduleResolveFilenameHook.installedValue [as _resolveFilename] (/home/dev/projects/my_custom_own_projects/js_related/diff-graphql-projects/leaning_from_docs/apollo-file-upload/node_modules/@cspotcode/source-map-support/source-map-support.js:811:30)
+    at Function.Module._load (node:internal/modules/cjs/loader:778:27)
+    at Module.require (node:internal/modules/cjs/loader:1005:19)
+    at require (node:internal/modules/cjs/helpers:102:18) {
+  code: 'ERR_PACKAGE_PATH_NOT_EXPORTED'
+}
+
