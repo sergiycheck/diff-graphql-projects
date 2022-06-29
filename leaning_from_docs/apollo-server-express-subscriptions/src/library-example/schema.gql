@@ -1,0 +1,13 @@
+type Post {
+  name: String!
+  authorId: Int
+}
+
+type Subscription {
+  postCreated: Post
+  hello: String!
+}
+
+type Mutation {
+  createPost(author: String, comment: String): Post
+}

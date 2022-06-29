@@ -1,0 +1,30 @@
+{
+  "name": "apollo-file-upload",
+  "version": "1.0.0",
+  "description": "main dependencies",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "start:dev": "export NODE_ENV=development && nodemon ./src/index.js",
+    "start:dev-js": "export NODE_ENV=development && node ./src/index.js",
+    "start:prod": "export NODE_ENV=production && node dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^3.9.0",
+    "express": "^4.18.1",
+    "graphql": "^16.5.0",
+    "graphql-upload": "^15.0.1",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/graphql-upload": "^8.0.11",
+    "@types/node": "^18.0.0",
+    "nodemon": "^2.0.18",
+    "ts-node": "^10.8.1",
+    "typescript": "^4.7.4"
+  }
+}
