@@ -1,5 +1,4 @@
 import { ContextType } from './types';
-import { Context } from './../../../nexus/nexus-tutorial/api/context';
 import dotenv from 'dotenv';
 import { expand } from 'dotenv-expand';
 const dotenvConf = dotenv.config();
@@ -10,8 +9,10 @@ import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import express from 'express';
 import http from 'http';
 import { loadFiles } from '@graphql-tools/load-files';
-import { userLoader } from './users/users.resolver';
-import { domainLoader } from './domains/domain.resolver';
+import { getUsersSocialByIds } from './users/users.resolver';
+import { domainLoader, getDomainByIds } from './domains/domain.resolver';
+import DataLoader from 'dataloader';
+import { getUsersByIds, getPostsByIds } from './blog/blog.resolver';
 
 async function startApolloServer(typeDefs, resolvers) {
   const app = express();
@@ -23,8 +24,11 @@ async function startApolloServer(typeDefs, resolvers) {
     csrfPrevention: true,
     cache: 'bounded',
     context: (): ContextType => ({
-      userLoader,
-      domainLoader,
+      userSocialLoader: new DataLoader(getUsersSocialByIds),
+      domainLoader: new DataLoader(getDomainByIds),
+
+      userBlogLoader: new DataLoader(getUsersByIds),
+      postBlogLoader: new DataLoader(getPostsByIds),
     }),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });

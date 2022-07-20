@@ -1,7 +1,7 @@
 import DataLoader from 'dataloader';
 import { ContextType } from 'src/types';
 
-type Domain = {
+export type Domain = {
   id: string;
   name: string;
   expires: string;
@@ -31,7 +31,7 @@ const getDomainById = (id: string): Domain => {
   return domain;
 };
 
-const getDomainByIds = async (ids: readonly string[]): Promise<Domain[]> => {
+export const getDomainByIds = async (ids: readonly string[]): Promise<Domain[]> => {
   return ids.map((id) => getDomainById(id));
 };
 
