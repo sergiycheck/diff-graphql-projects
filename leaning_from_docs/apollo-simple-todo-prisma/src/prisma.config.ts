@@ -1,7 +1,30 @@
 import { PrismaClient } from '@prisma/client';
 import { CustomLog } from './logger/customLogger';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: [
+    {
+      emit: 'event',
+      level: 'query',
+    },
+    {
+      emit: 'stdout',
+      level: 'error',
+    },
+    {
+      emit: 'stdout',
+      level: 'info',
+    },
+    {
+      emit: 'stdout',
+      level: 'warn',
+    },
+  ],
+});
+
+prisma.$on('query', (e) => {
+  CustomLog.log('Query: ' + e.query);
+});
 
 prisma.$use(async (params, next) => {
   const before = Date.now();
