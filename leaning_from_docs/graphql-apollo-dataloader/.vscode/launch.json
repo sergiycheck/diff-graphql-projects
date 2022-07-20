@@ -1,0 +1,12 @@
+{
+  "configurations": [
+    {
+      "name": "Launch main.ts",
+      "request": "launch",
+      "type": "node",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["run", "start:dev"],
+      "console": "integratedTerminal"
+    }
+  ]
+}
