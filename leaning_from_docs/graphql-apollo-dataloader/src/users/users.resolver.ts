@@ -1,13 +1,13 @@
 import DataLoader from 'dataloader';
 import { ContextType } from 'src/types';
 
-type User = {
+export type UserSocial = {
   id: string;
   name: string;
   bestFriendId: string;
 };
 
-const users: User[] = [
+const users: UserSocial[] = [
   {
     id: '1',
     name: 'Jamie',
@@ -25,31 +25,31 @@ const users: User[] = [
   },
 ];
 
-export const getUserById = (id: string): User => {
+export const getUserSocialById = (id: string): UserSocial => {
   console.log(`Calling getUserById for id: ${id}`);
 
   return users.find((d) => d.id === id);
 };
 
-const getUsersByIds = async (ids: readonly string[]): Promise<User[]> => {
-  return ids.map((id) => getUserById(id));
+export const getUsersSocialByIds = async (
+  ids: readonly string[]
+): Promise<UserSocial[]> => {
+  return ids.map((id) => getUserSocialById(id));
 };
 
 const resolver = {
   Query: {
     users: (_parent, _args, context, info) => users,
   },
-  User: {
-    bestFriend: async (parent: User, _args, context: ContextType, info) => {
+  UserSocial: {
+    bestFriend: async (parent: UserSocial, _args, context: ContextType, info) => {
       const { bestFriendId } = parent;
-      const { userLoader } = context;
-      // const user = await getUserById(bestFriendId);
-      const user = userLoader.load(bestFriendId);
+      const { userSocialLoader } = context;
+      // const user = await getUserSocialById(bestFriendId);
+      const user = userSocialLoader.load(bestFriendId);
       return user;
     },
   },
 };
-
-export const userLoader = new DataLoader(getUsersByIds);
 
 export default resolver;

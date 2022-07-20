@@ -1,9 +1,9 @@
 type Query {
-  users: [User!]!
+  users: [UserSocial!]!
 }
 
-type User {
+type UserSocial {
   id: ID!
   name: String!
-  bestFriend: User!
+  bestFriend: UserSocial!
 }
