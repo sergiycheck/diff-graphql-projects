@@ -1,0 +1,11 @@
+type Query {
+  domain(id: ID!): Domain!
+  domains: [Domain!]!
+}
+
+type Domain {
+  id: ID!
+  name: String!
+  expires: String!
+  owner: String!
+}
