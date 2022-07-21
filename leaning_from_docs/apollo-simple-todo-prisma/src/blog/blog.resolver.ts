@@ -35,9 +35,10 @@ const resolver = {
   },
 
   Mutation: {
-    createUser(parent, args, context: ContextType, info) {
+    async createUser(parent, args, context: ContextType, info) {
       const { dto }: { dto: CreateUser } = args;
-      return context.userService.createOne(dto);
+      const res = await context.userService.createOne(dto);
+      return res;
     },
     updateUser(parent, args, context: ContextType, info) {
       const { dto }: { dto: UpdateUser } = args;

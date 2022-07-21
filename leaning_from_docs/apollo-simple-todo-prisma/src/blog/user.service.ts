@@ -31,8 +31,9 @@ class UserService {
 
   async createOne(user: CreateUser) {
     const { email, posts } = user;
+    let res;
     if (posts && posts.length) {
-      return this.prisma.user.create({
+      res = await this.prisma.user.create({
         data: {
           email,
           posts: {
@@ -42,12 +43,15 @@ class UserService {
           },
         },
       });
+    } else {
+      res = await this.prisma.user.create({
+        data: {
+          email,
+        },
+      });
     }
-    return this.prisma.user.create({
-      data: {
-        email,
-      },
-    });
+
+    return res;
   }
 
   async updateOne(data: UpdateUser) {
