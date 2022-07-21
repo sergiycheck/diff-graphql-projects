@@ -1,3 +1,4 @@
+import { CustomLog } from './../logger/customLogger';
 import { prismaInstance } from '../constants';
 import { PrismaClient } from '@prisma/client';
 import { Inject, Service } from 'typedi';
@@ -11,17 +12,20 @@ class PostService {
   }
 
   async getList() {
-    return this.prisma.post.findMany();
+    const res = await this.prisma.post.findMany();
+    return res;
   }
 
   async getOne(id: string) {
-    return this.prisma.post.findFirst({ where: { id: id } });
+    return this.prisma.post.findUnique({ where: { id: id } });
   }
 
   async getListByUser(userId: string) {
     // return this.prisma.post.findMany({ where: { userId } });
     // the Prisma dataloader ✔ batches the findUnique queries
-    return this.prisma.user.findUnique({ where: { id: userId } }).posts();
+
+    const res = await this.prisma.user.findUnique({ where: { id: userId } }).posts();
+    return res;
   }
 
   async createOne(dto: CreatePost) {

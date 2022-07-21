@@ -9,9 +9,10 @@ import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import express from 'express';
 import http from 'http';
 import { loadFiles } from '@graphql-tools/load-files';
+import DataLoader from 'dataloader';
+
 import { getUsersSocialByIds } from './users/users.resolver';
 import { domainLoader, getDomainByIds } from './domains/domain.resolver';
-import DataLoader from 'dataloader';
 import { getUsersByIds, getPostsByIds } from './blog/blog.resolver';
 
 async function startApolloServer(typeDefs, resolvers) {
