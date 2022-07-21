@@ -1,3 +1,4 @@
+import { CustomLog } from './../logger/customLogger';
 import { prismaInstance } from '../constants';
 import { PrismaClient } from '@prisma/client';
 import { Inject, Service } from 'typedi';
@@ -11,7 +12,8 @@ class UserService {
   }
 
   async getList() {
-    return this.prisma.user.findMany();
+    const res = await this.prisma.user.findMany();
+    return res;
   }
 
   async getListWithRelations() {
@@ -23,7 +25,8 @@ class UserService {
   }
 
   async getOne(id: string) {
-    return this.prisma.user.findUnique({ where: { id: id } });
+    const res = await this.prisma.user.findUnique({ where: { id: id } });
+    return res;
   }
 
   async createOne(user: CreateUser) {

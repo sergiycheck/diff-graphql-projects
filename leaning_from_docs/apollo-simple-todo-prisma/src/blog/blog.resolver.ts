@@ -25,13 +25,11 @@ const resolver = {
 
   User: {
     posts(parent: User, _args, context: ContextType, info) {
-      CustomLog.log('parent', parent);
       return context.postsService.getListByUser(parent.id);
     },
   },
   Post: {
     user(parent: PostDb, _args, context: ContextType, info) {
-      CustomLog.log('parent', parent);
       return context.userService.getOne(parent.userId);
     },
   },
