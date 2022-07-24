@@ -58,6 +58,16 @@ function Home() {
   return (
     <header className="App-header">
       <h2>Apollo client app</h2>
+
+      <p>
+        usage of git cherry-pick{' '}
+        <a
+          className="App-link"
+          href="https://stackoverflow.com/questions/1628563/move-the-most-recent-commits-to-a-new-branch-with-git"
+        >
+          stackoverflow explanation
+        </a>
+      </p>
     </header>
   );
 }
