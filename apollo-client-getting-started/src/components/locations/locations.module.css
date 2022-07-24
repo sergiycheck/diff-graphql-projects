@@ -1,0 +1,9 @@
+.locations {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.info,
+.comments {
+  padding: 2rem;
+}
