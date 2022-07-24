@@ -1,12 +1,13 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
-import "./index.css";
-import App from "./components/app/App";
-import reportWebVitals from "./reportWebVitals";
+import './index.css';
+import App from './components/app/App';
+import reportWebVitals from './reportWebVitals';
+import { BrowserRouter } from 'react-router-dom';
 
-const baseUri = "https://flyby-gateway.herokuapp.com/";
+const baseUri = 'https://flyby-gateway.herokuapp.com/';
 
 const client = new ApolloClient({
   uri: baseUri,
@@ -14,12 +15,14 @@ const client = new ApolloClient({
 });
 
 const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
+  document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-      <App />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </ApolloProvider>
   </React.StrictMode>
 );
