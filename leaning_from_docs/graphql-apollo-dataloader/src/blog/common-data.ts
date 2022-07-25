@@ -1,15 +1,6 @@
-import { users, posts } from './db-data';
-
-export type User = {
-  id: string;
-  email: string;
-};
-
-export type Post = {
-  id: string;
-  title: string;
-  userId: string;
-};
+// import { users, posts } from './1_db-data';
+import { users, posts } from './2_db-data';
+import { User, Post } from './1_types';
 
 export const getUserById = (id: string): User => {
   console.log(`Calling getUserById for id: ${id}`);

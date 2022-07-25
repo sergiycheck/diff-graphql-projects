@@ -1,6 +1,6 @@
 import { ContextType } from './../types';
-import { users, posts } from './db-data';
-import { Post, User } from './common-data';
+import { users, posts } from './1_db-data';
+import { Post, User } from './1_types';
 
 const resolver = {
   Query: {
