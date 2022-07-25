@@ -62,28 +62,24 @@ describe('index requests tests', () => {
     const findManyMock = jest
       .spyOn(prismaMock.user, 'findMany')
       .mockImplementation(() => {
-        return users;
+        const [firstUser, secondUser] = users;
+
+        const result = [
+          {
+            ...firstUser,
+            posts: [...postArrFirst],
+          },
+          {
+            ...secondUser,
+            posts: [...postArrSecondAndThird],
+          },
+        ];
+
+        return result;
       });
 
     const [mockFirst, mockSecond] = users;
     const { userId, ...expectedData } = postArrFirst[0];
-
-    const findUniqueMock = jest
-      .spyOn(prismaMock.user, 'findUnique')
-      .mockImplementation(() => {
-        const returnValue = {
-          posts: function (obj: any) {
-            return {};
-          },
-        };
-
-        jest
-          .spyOn(returnValue, 'posts')
-          .mockReturnValueOnce(postArrFirst)
-          .mockReturnValueOnce(postArrSecondAndThird);
-
-        return returnValue;
-      });
 
     const result = await testServer.executeOperation({
       query: /* GraphQL */ `
@@ -101,7 +97,6 @@ describe('index requests tests', () => {
     });
 
     expect(findManyMock).toHaveBeenCalled();
-    expect(findUniqueMock).toHaveBeenCalled();
 
     expect(result.errors).toBeUndefined();
 
@@ -114,24 +109,19 @@ describe('index requests tests', () => {
     expect(firstPost).toEqual(expectedData);
 
     findManyMock.mockClear();
-    findUniqueMock.mockClear();
   });
 
   test('return user by id', async () => {
     const [firstUser] = users;
 
-    const returnValue = {
-      posts: function (obj: any) {
-        return {};
-      },
+    const resultUser = {
+      ...firstUser,
+      posts: [...postArrFirst],
     };
-
-    jest.spyOn(returnValue, 'posts').mockReturnValueOnce(postArrFirst);
 
     const findUniqueMock = jest
       .spyOn(prismaMock.user, 'findUnique')
-      .mockReturnValueOnce(firstUser)
-      .mockReturnValueOnce(returnValue);
+      .mockReturnValueOnce(resultUser);
 
     const userId = '62d6a5c956abfd7a4a49ca02';
     const result = await testServer.executeOperation({
@@ -167,16 +157,44 @@ describe('index requests tests', () => {
     const findManyMock = jest
       .spyOn(prismaMock.post, 'findMany')
       .mockImplementation(() => {
-        return [...postArrSecondAndThird, ...postArrFirst];
+        const [firstUser, secondUser] = users;
+
+        const [firstPost] = postArrFirst;
+        const { userId, ...postData } = firstPost;
+
+        postArrSecondAndThird.forEach((p) => {
+          delete p.userId;
+          return p;
+        });
+        const [secondPost, thirdPost] = postArrSecondAndThird;
+
+        const result = [
+          {
+            ...firstPost,
+            user: {
+              ...firstUser,
+            },
+          },
+          {
+            ...secondPost,
+            user: {
+              ...secondUser,
+            },
+          },
+          {
+            ...thirdPost,
+            user: {
+              ...secondUser,
+            },
+          },
+        ];
+
+        return result;
       });
 
-    const [userFirst, userSecond] = users;
+    const numberOfPosts = 3;
 
-    const findUniqueMock = jest
-      .spyOn(prismaMock.user, 'findUnique')
-      .mockReturnValueOnce(userSecond)
-      .mockReturnValueOnce(userSecond)
-      .mockReturnValueOnce(userFirst);
+    const [userFirst, userSecond] = users;
 
     const result = await testServer.executeOperation({
       query: /* GraphQL */ `
@@ -194,17 +212,17 @@ describe('index requests tests', () => {
     });
 
     expect(findManyMock).toHaveBeenCalled();
-    expect(findUniqueMock).toHaveBeenCalled();
 
     expect(result.errors).toBeUndefined();
+    expect(result.data?.allPosts.length).toBe(numberOfPosts);
+    const [first, second] = result.data?.allPosts as Array<any>;
 
-    const [first, second, third] = result.data?.allPosts as Array<any>;
-    expect(first.id).toBe(postArrSecondAndThird[0].id);
+    expect(first.id).toBe(postArrFirst[0].id);
 
-    expect(first.user).toEqual(userSecond);
+    expect(first.user).toEqual(userFirst);
+    expect(second.user).toEqual(userSecond);
 
     findManyMock.mockClear();
-    findUniqueMock.mockClear();
   });
 
   test('mutation createUser', async () => {
@@ -221,10 +239,6 @@ describe('index requests tests', () => {
     };
 
     jest.spyOn(returnValue, 'posts').mockReturnValueOnce(res.data.createUser.posts);
-
-    const findUniqueMock = jest
-      .spyOn(prismaMock.user, 'findUnique')
-      .mockReturnValueOnce(returnValue);
 
     const result = await testServer.executeOperation({
       query: /* GraphQL */ `
@@ -245,14 +259,12 @@ describe('index requests tests', () => {
     });
 
     expect(createUserMock).toHaveBeenCalled();
-    expect(findUniqueMock).toHaveBeenCalled();
 
     const actualUser = result.data?.createUser;
 
     expect(actualUser).toEqual(res.data.createUser);
 
     createUserMock.mockClear();
-    findUniqueMock.mockClear();
   });
 
   // test('mutation createUser', async () => {
