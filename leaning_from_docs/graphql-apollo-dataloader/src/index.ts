@@ -13,7 +13,7 @@ import DataLoader from 'dataloader';
 
 import { getUsersSocialByIds } from './users/users.resolver';
 import { domainLoader, getDomainByIds } from './domains/domain.resolver';
-import { getUsersByIds, getPostsByIds } from './blog/blog.resolver';
+import { getUsersByIds, getPostsByIds } from './blog/common-data';
 
 async function startApolloServer(typeDefs, resolvers) {
   const app = express();
