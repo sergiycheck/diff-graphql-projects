@@ -1,3 +1,4 @@
+import { CacheScope } from 'apollo-server-types';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLResolveInfo } from 'graphql';
 
@@ -51,11 +52,14 @@ const typeDefs = /* GraphQL */ `
   }
 `;
 
+// TODO: can not see cached fields in
+// redis keys
 const resolvers = {
   Query: {
     books: (_parent: any, _args: any, context: any, info: GraphQLResolveInfo) => books,
 
     book: (_parent: any, _args: any, context: any, info: GraphQLResolveInfo) => {
+      info.cacheControl.setCacheHint({ maxAge: 60, scope: CacheScope.Public });
       const [first] = books;
       return first;
     },

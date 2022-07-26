@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import responseCachePlugin from 'apollo-server-plugin-response-cache';
 import { ApolloServer } from 'apollo-server-express';
 import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import express from 'express';
@@ -21,10 +22,14 @@ async function startApolloServer(schema: GraphQLSchema) {
   const redis_port = process.env.REDIS_PORT;
   const redis_host = process.env.REDIS_HOST;
 
+  const keyVInstance = new Keyv(`redis://${redis_host}:${redis_port}`);
+  const keyVAdapter = new KeyvAdapter(keyVInstance);
+
   const server = new ApolloServer({
     schema,
     csrfPrevention: true,
-    cache: new KeyvAdapter(new Keyv(`redis://${redis_host}:${redis_port}`)),
+
+    cache: keyVAdapter,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
