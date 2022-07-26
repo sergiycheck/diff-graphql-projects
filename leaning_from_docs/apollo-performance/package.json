@@ -6,7 +6,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
-    "start:dev": "export NODE_ENV=development && nodemon ./src/index.ts",
+    "start:dev": "export NODE_ENV=development && nodemon ./src/cache-backends/config-redis-caching.ts",
     "start:prod": "export NODE_ENV=production && node dist"
   },
   "devDependencies": {
@@ -16,7 +16,9 @@
     "typescript": "^4.7.4"
   },
   "dependencies": {
+    "@apollo/utils.keyvadapter": "^1.1.1",
     "@graphql-tools/schema": "^8.5.0",
+    "@keyv/redis": "^2.3.8",
     "apollo-server": "^3.10.0",
     "apollo-server-core": "^3.10.0",
     "apollo-server-express": "^3.10.0",
@@ -24,6 +26,7 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "graphql": "^16.5.0",
+    "keyv": "^4.3.3",
     "rimraf": "^3.0.2"
   }
 }

@@ -2,29 +2,30 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { ApolloServer } from 'apollo-server-express';
-import {
-  ApolloServerPluginCacheControl,
-  ApolloServerPluginDrainHttpServer,
-} from 'apollo-server-core';
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import express from 'express';
 import http from 'http';
 import { GraphQLSchema } from 'graphql';
-import schema from './schema';
+import Keyv from 'keyv';
+import { KeyvAdapter } from '@apollo/utils.keyvadapter';
+
+import schema from '../schema';
+
+// connect to redis docs
+// https://github.com/luin/ioredis#connect-to-redis
 
 async function startApolloServer(schema: GraphQLSchema) {
   const app = express();
   const httpServer = http.createServer(app);
 
+  const redis_port = process.env.REDIS_PORT;
+  const redis_host = process.env.REDIS_HOST;
+
   const server = new ApolloServer({
     schema,
     csrfPrevention: true,
-    cache: 'bounded',
-    plugins: [
-      ApolloServerPluginDrainHttpServer({ httpServer }),
-
-      // optional
-      ApolloServerPluginCacheControl({ defaultMaxAge: 5 }),
-    ],
+    cache: new KeyvAdapter(new Keyv(`redis://${redis_host}:${redis_port}`)),
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
   await server.start();

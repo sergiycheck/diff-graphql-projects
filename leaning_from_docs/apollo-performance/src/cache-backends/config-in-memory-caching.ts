@@ -2,14 +2,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { ApolloServer } from 'apollo-server-express';
-import {
-  ApolloServerPluginCacheControl,
-  ApolloServerPluginDrainHttpServer,
-} from 'apollo-server-core';
+import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
 import express from 'express';
 import http from 'http';
 import { GraphQLSchema } from 'graphql';
-import schema from './schema';
+
+import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache';
+import schema from '../schema';
+
+// InMemoryLRUCache class is a wrapper around the lru-cache package
+// 30MiB of memory
 
 async function startApolloServer(schema: GraphQLSchema) {
   const app = express();
@@ -18,13 +20,13 @@ async function startApolloServer(schema: GraphQLSchema) {
   const server = new ApolloServer({
     schema,
     csrfPrevention: true,
-    cache: 'bounded',
-    plugins: [
-      ApolloServerPluginDrainHttpServer({ httpServer }),
-
-      // optional
-      ApolloServerPluginCacheControl({ defaultMaxAge: 5 }),
-    ],
+    cache: new InMemoryLRUCache({
+      // ~100MiB
+      maxSize: Math.pow(2, 20) * 100,
+      // 5 minutes (in milliseconds)
+      ttl: 300_000,
+    }),
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
   await server.start();

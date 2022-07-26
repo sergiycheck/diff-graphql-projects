@@ -9,7 +9,13 @@ import {
 import express from 'express';
 import http from 'http';
 import { GraphQLSchema } from 'graphql';
-import schema from './schema';
+import Keyv from 'keyv';
+import { KeyvAdapter } from '@apollo/utils.keyvadapter';
+
+import schema from '../schema';
+
+// InMemoryLRUCache class is a wrapper around the lru-cache package
+// 30MiB of memory
 
 async function startApolloServer(schema: GraphQLSchema) {
   const app = express();
@@ -18,13 +24,8 @@ async function startApolloServer(schema: GraphQLSchema) {
   const server = new ApolloServer({
     schema,
     csrfPrevention: true,
-    cache: 'bounded',
-    plugins: [
-      ApolloServerPluginDrainHttpServer({ httpServer }),
-
-      // optional
-      ApolloServerPluginCacheControl({ defaultMaxAge: 5 }),
-    ],
+    cache: new KeyvAdapter(new Keyv()),
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
   await server.start();
