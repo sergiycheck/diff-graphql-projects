@@ -1,36 +1,31 @@
-import { CustomLog } from './../logger/customLogger';
-import { CreatePost, UpdatePost, PostDb } from './post.types';
-import { CreateUser, UpdateUser, User } from './user.types';
+import { CreatePost, UpdatePost } from './post.types';
+import { CreateUser, UpdateUser } from './user.types';
 import { ContextType } from 'src/common.types';
-import { Post } from './post.types';
+import graphqlFields from 'graphql-fields';
 
 const resolver = {
   Query: {
     allUsers(_parent, _args, context: ContextType, info) {
-      return context.userService.getList();
+      const requestedFields = graphqlFields(info);
+      return context.userService.getList(requestedFields);
     },
 
     user(_parent, args: { id: string }, context: ContextType, info) {
-      return context.userService.getOne(args.id);
+      const requestedFields = graphqlFields(info);
+
+      return context.userService.getOne(args.id, requestedFields);
     },
 
     allPosts(_parent, _args, context: ContextType, info) {
-      return context.postsService.getList();
+      const requestedFields = graphqlFields(info);
+
+      return context.postsService.getList(requestedFields);
     },
 
     post(_parent, args: { id: string }, context: ContextType, info) {
-      return context.postsService.getOne(args.id);
-    },
-  },
+      const requestedFields = graphqlFields(info);
 
-  User: {
-    posts(parent: User, _args, context: ContextType, info) {
-      return context.postsService.getListByUser(parent.id);
-    },
-  },
-  Post: {
-    user(parent: PostDb, _args, context: ContextType, info) {
-      return context.userService.getOne(parent.userId);
+      return context.postsService.getOne(args.id, requestedFields);
     },
   },
 

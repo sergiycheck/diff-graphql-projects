@@ -5,7 +5,10 @@ const dotenvConf = dotenv.config();
 expand(dotenvConf);
 
 import { ApolloServer } from 'apollo-server-express';
-import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
+import {
+  ApolloServerPluginCacheControl,
+  ApolloServerPluginDrainHttpServer,
+} from 'apollo-server-core';
 import express from 'express';
 import http from 'http';
 import { loadFiles } from '@graphql-tools/load-files';
@@ -13,7 +16,7 @@ import DataLoader from 'dataloader';
 
 import { getUsersSocialByIds } from './users/users.resolver';
 import { domainLoader, getDomainByIds } from './domains/domain.resolver';
-import { getUsersByIds, getPostsByIds } from './blog/blog.resolver';
+import { getUsersByIds, getPostsByIds } from './blog/common-data';
 
 async function startApolloServer(typeDefs, resolvers) {
   const app = express();
@@ -31,7 +34,12 @@ async function startApolloServer(typeDefs, resolvers) {
       userBlogLoader: new DataLoader(getUsersByIds),
       postBlogLoader: new DataLoader(getPostsByIds),
     }),
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+
+      // optional
+      ApolloServerPluginCacheControl({ defaultMaxAge: 5 }),
+    ],
   });
 
   await server.start();

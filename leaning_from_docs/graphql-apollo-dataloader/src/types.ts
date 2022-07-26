@@ -1,5 +1,5 @@
 import DataLoader from 'dataloader';
-import { Post, User } from './blog/blog.resolver';
+import { Post, User } from './blog/common-data';
 import { Domain } from './domains/domain.resolver';
 import { UserSocial } from './users/users.resolver';
 

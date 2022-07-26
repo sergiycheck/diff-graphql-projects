@@ -1,23 +1,38 @@
-import { CustomLog } from './../logger/customLogger';
 import { prismaInstance } from '../constants';
 import { PrismaClient } from '@prisma/client';
 import { Inject, Service } from 'typedi';
 import { CreatePost, UpdatePost } from './post.types';
+import { BaseService } from './base.service';
 
 @Service()
-class PostService {
+class PostService extends BaseService {
   prisma: PrismaClient;
   constructor(@Inject(prismaInstance) prisma: PrismaClient) {
-    this.prisma = prisma;
+    super(prisma);
+
+    this.relationFields = ['user'];
   }
 
-  async getList() {
-    const res = await this.prisma.post.findMany();
+  async getList(requestedFields: any) {
+    const relationsToInclude = this.getRelationsToInclude(requestedFields);
+
+    const res = Object.keys(relationsToInclude).length
+      ? await this.prisma.post.findMany({ include: { ...relationsToInclude } })
+      : await this.prisma.post.findMany();
     return res;
   }
 
-  async getOne(id: string) {
-    return this.prisma.post.findUnique({ where: { id: id } });
+  async getOne(id: string, requestedFields: any) {
+    const relationsToInclude = this.getRelationsToInclude(requestedFields);
+
+    const res = Object.keys(relationsToInclude).length
+      ? await this.prisma.post.findUnique({
+          where: { id: id },
+          include: { ...relationsToInclude },
+        })
+      : this.prisma.post.findUnique({ where: { id: id } });
+
+    return res;
   }
 
   async getListByUser(userId: string) {

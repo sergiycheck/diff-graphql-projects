@@ -1,18 +1,24 @@
-import { CustomLog } from './../logger/customLogger';
 import { prismaInstance } from '../constants';
 import { PrismaClient } from '@prisma/client';
 import { Inject, Service } from 'typedi';
 import { CreateUser, UpdateUser } from './user.types';
+import { intersection } from 'lodash';
+import { BaseService } from './base.service';
 
 @Service()
-class UserService {
-  prisma: PrismaClient;
+class UserService extends BaseService {
   constructor(@Inject(prismaInstance) prisma: PrismaClient) {
-    this.prisma = prisma;
+    super(prisma);
+
+    this.relationFields = ['posts'];
   }
 
-  async getList() {
-    const res = await this.prisma.user.findMany();
+  async getList(requestedFields: any) {
+    const relationsToInclude = this.getRelationsToInclude(requestedFields);
+
+    const res = Object.keys(relationsToInclude).length
+      ? await this.prisma.user.findMany({ include: { ...relationsToInclude } })
+      : await this.prisma.user.findMany();
     return res;
   }
 
@@ -24,8 +30,15 @@ class UserService {
     });
   }
 
-  async getOne(id: string) {
-    const res = await this.prisma.user.findUnique({ where: { id: id } });
+  async getOne(id: string, requestedFields: any) {
+    const relationsToInclude = this.getRelationsToInclude(requestedFields);
+
+    const res = Object.keys(relationsToInclude).length
+      ? await this.prisma.user.findUnique({
+          where: { id: id },
+          include: { ...relationsToInclude },
+        })
+      : await this.prisma.user.findUnique({ where: { id: id } });
     return res;
   }
 
