@@ -52,6 +52,15 @@ const typeDefs = /* GraphQL */ `
   }
 `;
 
+// middlewares is available with graphql modules
+async function middleware({ root, args, context, info }, next) {
+  /* code */
+
+  const result = await next();
+
+  return result;
+}
+
 // TODO: can not see cached fields in
 // redis keys
 const resolvers = {
