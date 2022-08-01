@@ -9,7 +9,7 @@ import { GraphQLSchema } from 'graphql';
 import Keyv from 'keyv';
 import { KeyvAdapter } from '@apollo/utils.keyvadapter';
 
-import schema from '../schema';
+import schema from './schema';
 
 // connect to redis docs
 // https://github.com/luin/ioredis#connect-to-redis
