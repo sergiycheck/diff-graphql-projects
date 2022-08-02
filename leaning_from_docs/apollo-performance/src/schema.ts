@@ -72,6 +72,8 @@ const resolvers = {
         cachedTitle: 'cached title for cached book',
       };
 
+      console.log('getting cached book', cachedBook);
+
       return cachedBook;
     },
 

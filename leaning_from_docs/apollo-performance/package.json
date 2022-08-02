@@ -6,7 +6,9 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc",
-    "start:dev": "export NODE_ENV=development && nodemon ./src/cache-backends/config-redis-caching.ts",
+    "start:dev-external": "export NODE_ENV=development && nodemon ./src/cache-backends/config-external-caching.ts",
+    "start:dev-in-mem": "export NODE_ENV=development && nodemon ./src/cache-backends/config-in-memory-caching.ts",
+    "start:dev-redis": "export NODE_ENV=development && nodemon ./src/cache-backends/config-redis-caching.ts",
     "start:prod": "export NODE_ENV=production && node dist"
   },
   "devDependencies": {
