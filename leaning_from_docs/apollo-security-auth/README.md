@@ -1,10 +1,13 @@
 ## Prerequisites
 
 run gen.sh file to generate public and private rsa keys
+TODO: generate public key in appropriate format like in [rsa generator](http://travistidwell.com/jsencrypt/demo/) with start and end marks
 
 ```
 ./gen.sh
 ```
+
+generated keys should be
 
 helpful resources
 
