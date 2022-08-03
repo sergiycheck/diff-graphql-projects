@@ -1,0 +1,39 @@
+{
+  "name": "graphql-apollo-dataloader",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc",
+    "start:dev": "export NODE_ENV=development && nodemon ./src/index.ts",
+    "start:prod": "export NODE_ENV=production && node dist"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@graphql-tools/load-files": "^6.6.0",
+    "@graphql-tools/schema": "^8.5.0",
+    "@graphql-tools/utils": "^8.8.0",
+    "@types/bcrypt": "^5.0.0",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.8",
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "apollo-server": "^3.10.0",
+    "apollo-server-core": "^3.10.0",
+    "apollo-server-express": "^3.10.0",
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dataloader": "^2.1.0",
+    "dotenv": "^16.0.1",
+    "dotenv-expand": "^8.0.3",
+    "express": "^4.18.1",
+    "graphql": "^16.5.0",
+    "graphql-type-json": "^0.3.2",
+    "jsonwebtoken": "^8.5.1",
+    "rimraf": "^3.0.2"
+  }
+}
