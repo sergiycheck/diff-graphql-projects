@@ -94,8 +94,16 @@ const resolver = {
       return context.usersAuth.genTokenForUser({ email: args.email });
     },
 
-    createPost(parent, args, context: ContextType, info: GraphQLResolveInfo) {
+    async createPost(parent, args, context: ContextType, info: GraphQLResolveInfo) {
+      if (!context.user) throw new Error(`you must be signed in to create post`);
+      const { user } = context;
+
+      const userFromDb = await context.userBlogLoader.load(user.id);
+      if (!userFromDb) throw new Error(`no such user with id ${user.id}`);
+
       const { dto }: { dto: CreatePost } = args;
+
+      if (userFromDb.id !== dto.userId) throw new Error(`you don't own this token`);
 
       const newItem: Post = {
         id: `${Number(posts[posts.length - 1].id) + 1}`,

@@ -25,7 +25,7 @@ type Post @cacheControl(maxAge: 240) {
   title: String
   user: User
   votes: Int
-  readByCurrentUser: Boolean!
+  readByCurrentUser: Boolean
 }
 
 input CreatePost {

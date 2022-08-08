@@ -52,8 +52,8 @@ async function startApolloServer(typeDefs, resolvers) {
       }
 
       // Try to retrieve a user with the token
-      // const user = await usersAuth.getUserFromToken(token);
-      const user = { id: '123', email: 'test', password: 'test pass' };
+      const user = await usersAuth.getUserFromToken(token);
+      // const user = { id: '123', email: 'test', password: 'test pass' };
 
       // Add the user to the context
 
