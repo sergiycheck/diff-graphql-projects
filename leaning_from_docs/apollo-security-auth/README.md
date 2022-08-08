@@ -16,3 +16,17 @@ helpful resources
 [rsa generator](http://travistidwell.com/jsencrypt/demo/)
 
 [tutorial with python about rsa encryption](https://blog.miguelgrinberg.com/post/json-web-tokens-with-public-key-signatures)
+
+### generate private key and certificate with any tool you know and place them
+
+### into development and production folders
+
+```bash
+mkdir .ssl && cd .ssl && mkdir development && mkdir production
+```
+
+generate key and certificate
+
+```bash
+mkcert localhost
+```
