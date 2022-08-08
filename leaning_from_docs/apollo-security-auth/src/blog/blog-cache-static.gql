@@ -65,7 +65,7 @@ input UpdateUser {
 type Query {
   allUsers: [User!]
   user(id: String!): User
-  getUserFromToken(token: String!): User!
+  getUserFromToken: User!
 
   allPosts: [Post!]
   post(id: String!): Post

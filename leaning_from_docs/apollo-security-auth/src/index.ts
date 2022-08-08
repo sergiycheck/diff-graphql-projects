@@ -7,6 +7,7 @@ import { ApolloServer } from 'apollo-server-express';
 import {
   ApolloServerPluginCacheControl,
   ApolloServerPluginDrainHttpServer,
+  AuthenticationError,
 } from 'apollo-server-core';
 import express from 'express';
 import http from 'http';
@@ -21,6 +22,7 @@ updateUsers();
 
 import usersAuth from './blog/users-auth';
 import { ContextType } from './types';
+import { User } from './blog/types';
 
 async function startApolloServer(typeDefs, resolvers) {
   const app = express();
@@ -31,6 +33,7 @@ async function startApolloServer(typeDefs, resolvers) {
     resolvers: await loadFiles('src/**/*.resolver.ts'),
     csrfPrevention: true,
     cache: 'bounded',
+
     context: async ({ req, res }): Promise<ContextType> => {
       // Note: This example uses the `req` argument to access headers,
       // but the arguments received by `context` vary by integration.
@@ -51,13 +54,20 @@ async function startApolloServer(typeDefs, resolvers) {
         return partOfContext;
       }
 
-      // Try to retrieve a user with the token
-      const user = await usersAuth.getUserFromToken(token);
-      // const user = { id: '123', email: 'test', password: 'test pass' };
-
-      // Add the user to the context
+      let user: User;
+      try {
+        // const user = { id: '123', email: 'test', password: 'test pass' };
+        user = await usersAuth.getUserFromToken(token);
+      } catch (error) {
+        const decoded = usersAuth.decodeJwtToken(token);
+        const email = decoded.payload['email'];
+        throw new AuthenticationError(`update jwt token for user ${email}`, {
+          email,
+        });
+      }
 
       return {
+        token,
         user,
         ...partOfContext,
       };
@@ -71,7 +81,12 @@ async function startApolloServer(typeDefs, resolvers) {
   });
 
   await server.start();
-  server.applyMiddleware({ app });
+
+  const corsOptions = {
+    origin: ['https://www.your-app.example', 'https://studio.apollographql.com'],
+    credentials: true,
+  };
+  server.applyMiddleware({ app, cors: corsOptions });
   const port = process.env.PORT;
   await new Promise<void>((resolve) => httpServer.listen({ port: port }, resolve));
   console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`);

@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import fs from 'node:fs';
 import path from 'node:path';
 import { User, Post, Token } from './types';
@@ -18,27 +18,34 @@ async function getUserFromToken(token: string): Promise<User> {
   };
 
   return users.find((u) => u.email === result.email);
+}
 
-  function getVerifiedResult(
-    token: string,
-    publicKey: string,
-    jwtAlgorithm: jwt.Algorithm
-  ): Promise<string | jwt.JwtPayload> {
-    return new Promise((resolve) => {
-      jwt.verify(
-        token,
-        publicKey,
-        { algorithms: [jwtAlgorithm] },
-        function (err, decoded) {
-          if (err) {
-            throw err;
-          }
+function getVerifiedResult(
+  token: string,
+  publicKey: string,
+  jwtAlgorithm: jwt.Algorithm
+): Promise<string | jwt.JwtPayload> {
+  return new Promise((resolve) => {
+    jwt.verify(token, publicKey, { algorithms: [jwtAlgorithm] }, function (err, decoded) {
+      if (err) {
+        throw err;
+      }
 
-          resolve(decoded);
-        }
-      );
+      resolve(decoded);
     });
+  });
+}
+
+declare module 'jsonwebtoken' {
+  interface JwtPayload {
+    email?: string;
   }
+}
+
+function decodeJwtToken(token: string) {
+  const decoded = jwt.decode(token, { complete: true });
+
+  return decoded;
 }
 
 async function genTokenForUser(data: { email: User['email'] }): Promise<Token> {
@@ -84,4 +91,5 @@ async function getAndReadPrivateKey(privateKeyName: string): Promise<string> {
 export default {
   getUserFromToken,
   genTokenForUser,
+  decodeJwtToken,
 };

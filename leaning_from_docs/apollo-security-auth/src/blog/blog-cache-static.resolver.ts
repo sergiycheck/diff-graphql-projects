@@ -15,13 +15,8 @@ const resolver = {
       return context.userBlogLoader.load(args.id);
     },
 
-    getUserFromToken(
-      parent,
-      args: { token: string },
-      context: ContextType,
-      info: GraphQLResolveInfo
-    ) {
-      return context.usersAuth.getUserFromToken(args.token);
+    getUserFromToken(parent, args, context: ContextType, info: GraphQLResolveInfo) {
+      return context.usersAuth.getUserFromToken(context.token);
     },
 
     allPosts(_parent, _args, context: ContextType, info: GraphQLResolveInfo) {
