@@ -3,3 +3,5 @@ node_modules
 .env
 apollo-auth-key
 apollo-auth-key.pub
+dist
+.ssl
