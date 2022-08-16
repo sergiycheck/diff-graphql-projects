@@ -22,6 +22,24 @@ Generate key and certificate
 mkcert localhost
 ```
 
+### Environment variables
+
+```env
+DEV_PORT=4083
+PROD_PORT=4430
+
+SALT_ROUNDS=10
+
+PRIVATE_RSA_KEY_NAME='apollo-auth-key'
+PUBLIC_RSA_KEY_NAME='apollo-auth-key.pub'
+
+SSL_PRIVATE_KEY='localhost-key.pem'
+SSL_CERTIFICATE='localhost.pem'
+
+JWT_ALGORITHM='RS256'
+JWT_EXPIRATION='1h'
+```
+
 ### Helpful resources
 
 [JSON Web Token (JWT) — The right way of implementing, with Node.js](https://siddharthac6.medium.com/json-web-token-jwt-the-right-way-of-implementing-with-node-js-65b8915d550e)
