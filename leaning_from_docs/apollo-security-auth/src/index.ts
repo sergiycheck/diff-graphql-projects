@@ -31,7 +31,6 @@ async function startApolloServer(typeDefs, resolvers) {
   const app = express();
 
   const configurations = {
-    // Note: You may need sudo to run on port 443
     production: { ssl: true, port: process.env.PROD_PORT, hostname: 'localhost' },
     development: { ssl: false, port: process.env.DEV_PORT, hostname: 'localhost' },
   };
