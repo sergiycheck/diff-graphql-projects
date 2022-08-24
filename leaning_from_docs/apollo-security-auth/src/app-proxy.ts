@@ -44,8 +44,8 @@ export default function createProxyForTheApp(targetUrl: string): ProxyApp {
       onProxyRes: responseInterceptor(async (responseBuffer, proxyRes, req, res) => {
         proxyRes.headers['x-added'] = 'foobar';
         delete proxyRes.headers['x-removed'];
-
-        if (proxyRes.headers['content-type'].startsWith('application/json')) {
+        const contentTypeHeader = proxyRes.headers['content-type'];
+        if (contentTypeHeader && contentTypeHeader.startsWith('application/json')) {
           let data = JSON.parse(responseBuffer.toString('utf8'));
 
           data = Object.assign({}, data, { extra: 'foo bar' });

@@ -1,0 +1,34 @@
+service: aws-node-project
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: eu-central-1
+  deploymentMethod: direct
+  environment:
+    NODE_ENV: dev
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+functions:
+  graphql:
+    handler: src/graphql.graphqlHandler
+    events:
+      - http:
+          path: /
+          method: post
+          cors: true
+      - http:
+          path: /
+          method: get
+          cors: true
+
+custom:
+  serverless-offline:
+    httpPort: 3029
+  serverlessPluginTypescript:
+    tsConfigFileLocation: './tsconfig.build.json'
