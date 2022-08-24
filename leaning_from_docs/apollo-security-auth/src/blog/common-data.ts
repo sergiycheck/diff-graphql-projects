@@ -1,9 +1,10 @@
+import { logger } from './../utils/logger';
 // import { users, posts } from './1_db-data';
 import { users, posts } from './db-data';
 import { User, Post } from './types';
 
 export const getUserById = (id: string): User => {
-  console.log(`Calling getUserById for id: ${id}`);
+  logger.log(`info`, `Calling getUserById for id: ${id}`);
 
   return users.find((d) => d.id === id);
 };
@@ -12,7 +13,7 @@ export const getUsersByIds = async (ids: readonly string[]): Promise<User[]> => 
 };
 
 export const getPostById = (id: string): Post => {
-  console.log(`Calling getPostById for id: ${id}`);
+  logger.log(`info`, `Calling getPostById for id: ${id}`);
 
   return posts.find((d) => d.id === id);
 };

@@ -1,3 +1,4 @@
+import { logger } from './../utils/logger';
 import { CacheScope } from 'apollo-server-types';
 import { GraphQLResolveInfo } from 'graphql';
 import { ContextType } from './../types';
@@ -31,13 +32,13 @@ const resolver = {
 
   User: {
     posts(parent: User, _args, context: ContextType, info: GraphQLResolveInfo) {
-      console.log('User posts parent', parent);
+      logger.log(`info`, `User posts parent ${JSON.stringify(parent)}`);
       return posts.filter((p) => p.userId === parent.id);
     },
   },
   Post: {
     user(parent: Post, _args, context: ContextType, info: GraphQLResolveInfo) {
-      console.log('Post user parent', parent);
+      logger.log(`info`, `Post user parent ${JSON.stringify(parent)}`);
       return context.userBlogLoader.load(parent.userId);
     },
   },
