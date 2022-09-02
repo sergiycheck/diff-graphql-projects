@@ -9,6 +9,7 @@ import { GraphQLSchema } from 'graphql';
 
 import { InMemoryLRUCache } from '@apollo/utils.keyvaluecache';
 import schema from '../schema';
+import cors from 'cors';
 
 // InMemoryLRUCache class is a wrapper around the lru-cache package
 // 30MiB of memory
@@ -16,16 +17,19 @@ import schema from '../schema';
 async function startApolloServer(schema: GraphQLSchema) {
   const app = express();
   const httpServer = http.createServer(app);
+  app.use(cors());
 
   const server = new ApolloServer({
     schema,
     csrfPrevention: true,
+
     cache: new InMemoryLRUCache({
       // ~100MiB
       maxSize: Math.pow(2, 20) * 100,
       // 5 minutes (in milliseconds)
       ttl: 300_000,
     }),
+
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
