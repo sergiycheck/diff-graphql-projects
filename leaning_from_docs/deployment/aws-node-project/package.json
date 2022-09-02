@@ -3,7 +3,7 @@
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "tsc -p ./tsconfig.build.json",
-    "local:dev-ts": "rimraf .build && sls offline --config sls.yml"
+    "start": "rimraf .build && sls offline --config sls.yml"
   },
   "devDependencies": {
     "serverless-offline": "^9.2.6",

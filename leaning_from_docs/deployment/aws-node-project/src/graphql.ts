@@ -1,6 +1,7 @@
 import { ApolloServer, gql } from 'apollo-server-lambda';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
-import { GraphQLResolveInfo } from 'graphql';
+import { DocumentNode, GraphQLResolveInfo } from 'graphql';
+import { APIGatewayEvent, Context, Callback } from 'aws-lambda';
 
 const typeDefs = gql`
   type Query {
@@ -16,25 +17,42 @@ const resolvers = {
     },
   },
 };
-const isDev = process.env.NODE_ENV === 'dev';
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  context: ({ event, context, express }) => {
-    console.log('event', event);
-    return {
-      headers: event.headers,
-      functionName: context.functionName,
-      event,
-      context,
-      expressRequest: express.req,
-    };
-  },
-  csrfPrevention: true,
-  cache: 'bounded',
-  introspection: isDev,
-  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
-});
+function getServer(typeDefs: DocumentNode, resolvers) {
+  const isDev = process.env.NODE_ENV === 'dev';
+  let server: ApolloServer;
+  if (!server) {
+    server = new ApolloServer({
+      typeDefs,
+      resolvers,
+      context: ({ event, context, express }) => {
+        return {
+          headers: event.headers,
+          functionName: context.functionName,
+          event,
+          context,
+          expressRequest: express.req,
+        };
+      },
+      csrfPrevention: true,
+      cache: 'bounded',
+      introspection: isDev,
+      plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+    });
+  }
 
-exports.graphqlHandler = server.createHandler();
+  return server;
+}
+
+exports.graphqlHandler = async function (
+  event: APIGatewayEvent,
+  context: Context,
+  callback: Callback
+) {
+  const server = getServer(typeDefs, resolvers);
+  const handler = server.createHandler();
+  event.path = `/graphql`;
+  const result = await handler(event, context, callback);
+
+  return result;
+};

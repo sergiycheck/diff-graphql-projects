@@ -5,7 +5,7 @@
       "request": "launch",
       "type": "node",
       "runtimeExecutable": "yarn",
-      "runtimeArgs": ["run", "local:dev-ts"],
+      "runtimeArgs": ["run", "start"],
       "console": "integratedTerminal"
     }
   ]
