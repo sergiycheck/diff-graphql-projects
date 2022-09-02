@@ -3,7 +3,9 @@
   "scripts": {
     "prebuild": "rimraf lib",
     "build": "tsc -p ./tsconfig.build.json",
-    "start": "rimraf .build && sls offline --config sls.yml"
+    "start": "rimraf .build && sls offline --config sls.dev.yml",
+    "deploy:dev": "sls -c sls.dev.yml deploy",
+    "deploy:dev:func": "sls -c sls.dev.yml deploy function --function graphql"
   },
   "devDependencies": {
     "serverless-offline": "^9.2.6",
