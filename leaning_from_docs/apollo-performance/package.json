@@ -9,7 +9,8 @@
     "start:default": "export NODE_ENV=development && nodemon ./src/cache-backends/default-persisted-queries.ts",
     "start:dev-external": "export NODE_ENV=development && nodemon ./src/cache-backends/config-external-caching.ts",
     "start:dev-in-mem": "export NODE_ENV=development && nodemon ./src/cache-backends/config-in-memory-caching.ts",
-    "start:dev-redis": "export NODE_ENV=development && nodemon ./src/cache-backends/config-redis-caching.ts",
+    "start:dev-redis:express": "export NODE_ENV=development && nodemon ./src/cache-backends/config-redis-caching-express.ts",
+    "start:dev-redis:apollo": "export NODE_ENV=development && nodemon ./src/cache-backends/config-redis-caching-apollo.ts",
     "start:prod": "export NODE_ENV=production && node dist"
   },
   "devDependencies": {

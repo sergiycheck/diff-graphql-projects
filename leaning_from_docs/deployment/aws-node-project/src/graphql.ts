@@ -51,7 +51,6 @@ exports.graphqlHandler = async function (
 ) {
   const server = getServer(typeDefs, resolvers);
   const handler = server.createHandler();
-  event.path = `/graphql`;
   const result = await handler(event, context, callback);
 
   return result;
