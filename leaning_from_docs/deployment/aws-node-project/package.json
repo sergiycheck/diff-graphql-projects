@@ -16,6 +16,7 @@
   "dependencies": {
     "apollo-server-lambda": "^3.10.1",
     "graphql": "^16.6.0",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "serverless": "^3.22.0"
   }
 }
