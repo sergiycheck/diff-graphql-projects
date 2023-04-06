@@ -96,6 +96,7 @@ export async function createApolloServer(
         // const user = { id: '123', email: 'test', password: 'test pass' };
         user = await usersAuth.getUserFromToken(token);
       } catch (error) {
+        console.log(error);
         const decoded = usersAuth.decodeJwtToken(token);
         const email = decoded.payload['email'];
         throw new AuthenticationError(`update jwt token for user ${email}`, {
